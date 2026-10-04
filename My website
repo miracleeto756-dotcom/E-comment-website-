@@ -1,0 +1,542 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Meli's Prive Variety Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #e91e63;    
+      --pink-light: #fce4ec;  #fc
+      --bg: #fff5f8;
+      --dark: #2d2d2d;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      padding-bottom: 75px;
+      min-height: 100vh;
+    }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; }
+
+    /* TOP BAR */
+    .topbar {
+      background: white;
+      padding: 14px 16px 10px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(233,30,99,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar .store-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--pink);
+    }
+    .topbar .tagline {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    /* PAGES */
+    .page { display: none; padding: 16px; }
+    .page.active { display: block; }
+
+    /* HERO */
+    .hero-box {
+      background: white;
+      border-radius: 18px;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(233,30,99,0.08);
+      margin-bottom: 22px;
+    }
+    .hero-box h1 {
+      font-size: 1.5rem;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .hero-box h1 span { color: var(--pink); }
+    .hero-box p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 18px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: var(--pink);
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--pink);
+      color: var(--pink);
+    }
+
+    /* SECTION */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 22px 0 14px;
+    }
+    .section-header h2 { font-size: 1.25rem; }
+    .see-all {
+      color: var(--pink);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* PRODUCTS */
+    .products-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      min-width: 155px;
+      width: 155px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .product-img {
+      height: 115px;
+      background: var(--pink-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      position: relative;
+    }
+    .product-info { padding: 12px; }
+    .product-info h3 {
+      font-size: 0.92rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .price { color: var(--pink); font-weight: 600; font-size: 1rem; }
+    .add-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      background: var(--pink);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* COMMENTS */
+    .comments-box {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .comment {
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+    }
+    .comment:last-child { border-bottom: none; }
+    .comment strong { color: var(--pink); }
+
+    /* CATEGORIES */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .cat-box {
+      background: white;
+      border-radius: 14px;
+      padding: 16px 10px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* CARD */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 14px;
+      box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
+      z-index: 200;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.7rem;
+      color: #888;
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .nav-item.active { color: var(--pink); }
+    .nav-item span { font-size: 1.35rem; margin-bottom: 2px; }
+
+    /* FLOAT BUTTONS */
+    .float-btn {
+      position: fixed;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      z-index: 150;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    .whatsapp { bottom: 90px; right: 16px; background: #25d366; color: white; }
+    .chat-btn { bottom: 90px; left: 16px; background: var(--pink); color: white; }
+
+    /* CHAT BOX */
+    .chat-box {
+      position: fixed;
+      bottom: 155px;
+      left: 16px;
+      width: 300px;
+      max-width: 85vw;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 300;
+    }
+    .chat-box.active { display: flex; }
+    .chat-header {
+      background: var(--pink);
+      color: white;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+    .chat-header button { background: none; border: none; color: white; font-size: 1.3rem; }
+    .chat-messages { height: 200px; padding: 12px; overflow-y: auto; background: #fafafa; }
+    .msg { margin-bottom: 10px; max-width: 80%; font-size: 0.9rem; }
+    .msg.bot { background: white; padding: 8px 12px; border-radius: 12px 12px 12px 4px; }
+    .msg.user { background: var(--pink-light); padding: 8px 12px; border-radius: 12px 12px 4px 12px; margin-left: auto; }
+    .chat-input { display: flex; border-top: 1px solid #eee; }
+    .chat-input input { flex: 1; border: none; padding: 12px; outline: none; font-family: inherit; }
+    .chat-input button { background: var(--pink); color: white; border: none; padding: 0 14px; }
+
+    /* FORM */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.85rem; margin-bottom: 5px; }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .payment-box {
+      background: var(--pink-light);
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+    .admin-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .admin-btn {
+      background: white;
+      border: none;
+      border-radius: 14px;
+      padding: 20px 12px;
+      text-align: center;
+      font-weight: 500;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .story-text p {
+      margin-bottom: 14px;
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="store-name">Meli's Prive Variety Store</div>
+    <div class="tagline">Crafted for elegance, designed for you</div>
+  </div>
+
+  <!-- ========== HOME ========== -->
+  <div id="home" class="page active">
+    <div class="hero-box">
+      <h1>Crafted for <span>elegance</span>, designed for you</h1>
+      <p>Discover carefully selected lifestyle, beauty, fashion, home and everyday essentials designed to add a touch of elegance and convenience to your life.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="showPage('categories')">Explore supplies</button>
+        <button class="btn btn-outline" onclick="document.getElementById('latest').scrollIntoView({behavior:'smooth'})">Latest from the store</button>
+      </div>
+    </div>
+
+    <div id="latest">
+      <div class="section-header">
+        <h2>Latest from the store</h2>
+        <span class="see-all" onclick="showPage('categories')">See all →</span>
+      </div>
+      <div class="products-scroll">
+        <div class="product-card">
+          <div class="product-img">
+            👟
+            <button class="add-btn" onclick="addToCart('Shoe rack', 5000, 'Strong and stylish shoe rack for home organisation')">+</button>
+          </div>
+          <div class="product-info">
+            <h3>Shoe rack</h3>
+            <div class="price">₦5,000</div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img">
+            👜
+            <button class="add-btn" onclick="addToCart('Channel bag', 5000, 'Fashionable Channel bag. Available in Blue, Black, Red, Green, Silver Red')">+</button>
+          </div>
+          <div class="product-info">
+            <h3>Channel bag</h3>
+            <div class="price">₦5,000</div>
+            <div style="font-size:0.72rem;color:#888;margin-top:3px;">Blue • Black • Red • Green • Silver</div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img">
+            🥤
+            <button class="add-btn" onclick="addToCart('Nice flask', 3000, 'Premium quality flask, keeps drinks hot or cold')">+</button>
+          </div>
+          <div class="product-info">
+            <h3>Nice flask</h3>
+            <div class="price">₦3,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comments-box">
+      <h3 style="margin-bottom:12px;font-size:1.1rem;">Comments</h3>
+      <div class="comment"><strong>Chioma:</strong> The shoe rack is very strong and looks expensive 🔥</div>
+      <div class="comment"><strong>Blessing:</strong> Channel bag is so beautiful, I love the colours!</div>
+      <div class="comment"><strong>Ada:</strong> Nice flask keeps my water cold for hours ❤️</div>
+    </div>
+
+    <div class="section-header"><h2>Shop by Categories</h2></div>
+    <div class="cat-grid">
+      <div class="cat-box" onclick="showPage('categories')">🌸 Perfumes & Fragrances</div>
+      <div class="cat-box" onclick="showPage('categories')">💎 Jewellery & Accessories</div>
+      <div class="cat-box" onclick="showPage('categories')">⌚ Wristwatches</div>
+      <div class="cat-box" onclick="showPage('categories')">👜 Bags & Tote Bags</div>
+      <div class="cat-box" onclick="showPage('categories')">🏡 Home & Room Décor</div>
+      <div class="cat-box" onclick="showPage('categories')">📦 Home Organisers</div>
+      <div class="cat-box" onclick="showPage('categories')">🍳 Kitchen Tools</div>
+      <div class="cat-box" onclick="showPage('categories')">🧹 Household Supplies</div>
+      <div class="cat-box" onclick="showPage('categories')">🔌 Appliances & Gadgets</div>
+      <div class="cat-box" onclick="showPage('categories')">📹 Content Creation</div>
+      <div class="cat-box" onclick="showPage('categories')">💄 Beauty & Lifestyle</div>
+      <div class="cat-box" onclick="showPage('categories')">💻 Digital Products</div>
+      <div class="cat-box" onclick="showPage('categories')">🎁 Gifts & Gift Sets</div>
+      <div class="cat-box" onclick="showPage('categories')">✨ New Arrivals</div>
+      <div class="cat-box" onclick="showPage('categories')">🔥 Best Sellers</div>
+      <div class="cat-box" onclick="showPage('categories')">🏷️ Sales & Offers</div>
+    </div>
+
+    <div style="margin-top:28px; text-align:center;">
+      <button class="btn" onclick="showPage('story')" style="width:100%;">Meet Meli's Prive 🤍</button>
+      <p style="margin-top:10px;font-size:0.85rem;color:var(--gray);">Ask our shop assistant</p>
+    </div>
+  </div>
+
+  <!-- ========== CATEGORIES ========== -->
+  <div id="categories" class="page">
+    <h2 style="margin-bottom:16px;">All Categories</h2>
+    <div class="cat-grid">
+      <div class="cat-box">🌸 Perfumes & Fragrances</div>
+      <div class="cat-box">💎 Jewellery & Accessories</div>
+      <div class="cat-box">⌚ Wristwatches</div>
+      <div class="cat-box">👜 Bags & Tote Bags</div>
+      <div class="cat-box">🏡 Home & Room Décor</div>
+      <div class="cat-box">📦 Home Organisers & Storage</div>
+      <div class="cat-box">🍳 Kitchen Tools & Essentials</div>
+      <div class="cat-box">🧹 Household Supplies</div>
+      <div class="cat-box">🔌 Appliances & Gadgets</div>
+      <div class="cat-box">📹 Content Creation Tools</div>
+      <div class="cat-box">💄 Beauty & Lifestyle</div>
+      <div class="cat-box">💻 Digital Products & Resources</div>
+      <div class="cat-box">🎁 Gifts & Gift Sets</div>
+      <div class="cat-box">✨ New Arrivals</div>
+      <div class="cat-box">🔥 Best Sellers</div>
+      <div class="cat-box">🏷️ Sales & Special Offers</div>
+    </div>
+  </div>
+
+  <!-- ========== CART ========== -->
+  <div id="cart" class="page">
+    <h2 style="margin-bottom:16px;">Your Cart</h2>
+    <div id="cart-items"></div>
+    <div id="cart-total" style="font-weight:600;font-size:1.15rem;margin:16px 0;"></div>
+    <div id="payment-section" style="display:none;">
+      <div class="payment-box">
+        <strong>Pay via Opay Transfer</strong><br><br>
+        Account Number: <b>8157406679</b><br>
+        Bank: <b>Opay</b><br>
+        Name: <b>Jack Blessing Azigbalowa</b><br><br>
+        <em>After payment, send proof on WhatsApp: 08157406579</em>
+      </div>
+      <button class="btn" style="width:100%;margin-top:14px;" onclick="alert('Thank you! Please send payment proof on WhatsApp.')">I have paid</button>
+    </div>
+  </div>
+
+  <!-- ========== ACCOUNT ========== -->
+  <div id="account" class="page">
+    <div class="card" style="text-align:center;">
+      <h2 style="margin-bottom:8px;">Meli's Prive Variety Store</h2>
+      <p style="color:var(--gray);margin-bottom:20px;">Choose how you would like to continue</p>
+      <button class="btn" style="width:100%;margin-bottom:12px;" onclick="showPage('home')">Continue as Customer</button>
+      <button class="btn btn-outline" style="width:100%;" onclick="showStaffLogin()">Staff Login</button>
+    </div>
+    <div id="staff-login" class="card" style="display:none;">
+      <h3 style="margin-bottom:16px;">Staff Login</h3>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" value="melodyjackson037@gmail.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Enter password">
+      </div>
+      <button class="btn" style="width:100%;" onclick="doLogin()">Login</button>
+      <p id="login-error" style="color:red;font-size:0.85rem;margin-top:10px;display:none;">Wrong email or password</p>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN ========== -->
+  <div id="admin" class="page">
+    <h2 style="margin-bottom:6px;">Meli's Prive Admin</h2>
+    <p style="color:var(--gray);margin-bottom:20px;">Welcome back, Melody 🤍</p>
+    <div class="admin-menu">
+      <button class="admin-btn" onclick="alert('Overview coming soon')">📊 Overview</button>
+      <button class="admin-btn" onclick="alert('Products management coming soon')">🛍️ Products</button>
+      <button class="admin-btn" onclick="showPage('story')">📖 Story</button>
+      <button class="admin-btn" onclick="alert('Reviews & Comments coming soon')">💬 Reviews</button>
+      <button class="admin-btn" onclick="alert('Reports coming soon')">📈 Report</button>
+      <button class="admin-btn" onclick="showPage('account')">👤 My Account</button>
+    </div>
+    <button class="btn btn-outline" style="width:100%;margin-top:20px;" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- ========== STORY ========== -->
+  <div id="story" class="page">
+    <h2 style="margin-bottom:16px;">Meet the Owner</h2>
+    <div class="card story-text">
+      <p><strong>Hi, I’m Melody, the founder of Meli’s Prive.</strong> 🤍</p>
+      <p>Meli’s Prive is a reflection of my love for beautiful things, creativity, elegance and the desire to build something of my own.</p>
+      <p>I started this brand with a small beginning and a big vision. Along the way, I’ve learned that building a business is not always easy, but every order, every customer and every new step reminds me why I started.</p>
+      <p>For me, Meli’s Prive is not simply about selling products. It’s about creating an experience where you can discover something beautiful, useful or special and feel confident choosing it for yourself or someone you love.</p>
+      <p>I’m still growing, learning and building—and I’m so grateful to have you here as part of the journey.</p>
+      <p><em>Welcome to Meli’s Prive.</em> ✨</p>
+      <p style="color:var(--pink);font-weight:500;">Crafted for elegance, designed for you.</p>
+    </div>
+
+    <h2 style="margin:24px 0 14px;">Our Story</h2>
+    <div class="card story-text">
+      <p>Meli’s Prive was born from a simple desire: to create a brand where everyday things could feel a little more beautiful, thoughtful and personal.</p>
+      <p>What started as a small dream has grown into a lifestyle brand built around discovering beautiful and useful pieces for the modern woman and her everyday life—from fragrances and jewellery to home essentials, décor, accessories and more.</p>
+      <p>Behind Meli’s Prive is Melody, a young woman who believes that you don't have to wait until you have everything figured out before you start building the life you envision. This brand is part of that journey—a journey of growth, creativity, resilience and becoming.</p>
+      <p>Every product is selected with the intention of bringing something special to our customers, whether it's a little elegance, convenience, comfort or simply something that makes you smile.</p>
+      <p>Meli’s Prive is more than a store to me. It is a reminder that something beautiful can be built from a small beginning.</p>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('home')"><span>🏠</span>Home</button>
+    <button class="nav-item" onclick="showPage('categories')"><span>📂</span>Categories</button>
+    <button class="nav-item" onclick="showPage('cart')"><span>🛒</span>Cart</button>
+    <button class="nav-item" onclick="showPage('account')"><span>👤</span>Account</button>
+  </div>
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/2348157406579" class="float-btn whatsapp" target="_blank">💬</a>
+
+  <!-- Chat Button -->
+  <button class="float-btn chat-btn" onclick="toggleChat()">💭</button>
+
+  <!-- Chat Box -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-header">
+      <span>Meli’s Assistant 🤍</span>
+      <button onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">Hi beautiful! 🌸 How can I help you today?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" i
